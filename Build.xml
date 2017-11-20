@@ -1,0 +1,38 @@
+<project>
+    <target name="clean">
+        <delete dir="Number1" />
+        <delete dir="Number2" />
+    </target>
+    <target name="compile" depends="clean">
+        <mkdir dir="Number1/classes" />
+        <mkdir dir="Number2/jarfile" />
+        <javac includeantruntime="false" srcdir="/home/student/workspace/NewProject/src" destdir="Number1/classes" />
+    </target>
+    <target name="jar" depends="compile">
+        <jar destfile="Number2/jarfile/Number.jar" basedir="Number1/classes">
+            <manifest>
+                <attribute name="Main-Class" value="Number" />
+            </manifest>
+        </jar>
+    </target>
+    <path id="application" location="/home/student/workspace/NewProject/Number2/jarfile/Number.jar" />
+    <target name="run" depends="jar">
+        <java classname="Number">
+            <classpath>
+                <!--path refid="classpath" /-->
+                <path refid="application" />
+            </classpath>
+        </java>
+    </target>
+    <target name="junit" depends="jar">
+        <junit printsummary="yes">
+            <classpath>
+                <path refid="classpath" />
+                <path refid="application" />
+            </classpath>
+            <batchtest fork="yes">
+                <fileset dir="${src.dir}" includes="*Test.java" />
+            </batchtest>
+        </junit>
+    </target>
+</project>
